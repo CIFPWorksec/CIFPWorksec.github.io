@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Usuarios</title>
+    <link rel="icon" type="image/png" href="Imagenes/logotipo.png">
+    <link rel="stylesheet" href="admin.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let dnis;
+
+            if (localStorage.getItem("dnis") != null) {
+                dnis = JSON.parse(localStorage.getItem("dnis"));
+            } else {
+                dnis = [];
+                localStorage.setItem("dnis", JSON.stringify(dnis));
+            }
+            let cargados;
+            let predet = document.getElementById("default");
+            predet.click();
+            predet = document.getElementById("default1");
+            predet.click();
+            predet = document.getElementById("default2");
+            predet.click();
+            let rol = document.getElementsByName("rol")[0];
+            let curso = document.getElementsByName("curso")[0];
+            let ciclo = document.getElementsByName("ciclo")[0];
+            let modulo = document.getElementsByName("modulo")[0];
+            let elegir = document.getElementsByName("elegir")[0];
+            let usuarios = document.getElementsByName("usuarios")[0];
+            let lista = document.getElementsByName("dnis")[0];
+            let form = document.getElementsByTagName("form")[0];
+            let reg = document.getElementById("reg");
+            let add = document.getElementById("add");
+            let borr = document.getElementById("borr");
+
+            if (dnis.length > 0) {
+                for (let dni in dnis) {
+                    cargados += "<option>"
+                    cargados += "DNI: " + dnis[dni];
+                    cargados += "</option>"
+                    usuarios.innerHTML = cargados;
+                }
+            } else {
+                usuarios.innerHTML = "<option>No existen registros</option>";
+            }
+            cargados = "";
+            if (dnis.length > 0) {
+                for (let dni in dnis) {
+                    cargados += "<option>"
+                    cargados += dnis[dni];
+                    cargados += "</option>"
+                    lista.innerHTML = cargados;
+                }
+            } else {
+                lista.innerHTML = "<option>No existen registros</option>";
+            }
+            curso.addEventListener("change", () => {
+                switch (curso.children[curso.selectedIndex].value) {
+                    case "1":
+                        modulo.innerHTML =
+                            "<option>Sistemas Informáticos</option><option>Bases de Datos</option><option>Programación</option><option>Lenguajes de Marcas y SGI</option><option>Entornos de Desarrollo</option><option>Formación y orientación laboral</option>";
+                        break;
+                    default:
+                        if (ciclo.children[ciclo.selectedIndex].value === "w") {
+                            modulo.innerHTML =
+                                "<option>Desarrollo Web en Entorno Cliente</option><option>Desarrollo Web en Entorno Servidor</option><option>Despliegue de Aplicaciones Web</option><option>Diseño de Interfaces Web</option><option>Proyecto de Desarrollo de Aplicaciones Web</option><option>Empresa e Iniciativa Emprendedora</option><option>Formación en Centros de Trabajo</option>";
+                        } else {
+                            modulo.innerHTML =
+                                "<option>Acceso a Datos</option><option>Programación multimedia y dispositivos móviles</option><option>Desarrollo de Interfaces</option><option>Programación de servicios y procesos</option><option>Sistemas de gestión empresarial</option><option>Proyecto de Desarrollo de Aplicaciones Multiplataforma</option><option>Empresa e Iniciativa Emprendedora</option><option>Formación en Centros de Trabajo</option>";
+                        }
+                }
+            });
+            ciclo.addEventListener("change", () => {
+
+                if (curso.children[curso.selectedIndex].value === "2") {
+
+                    if (ciclo.children[ciclo.selectedIndex].value === "w") {
+                        modulo.innerHTML =
+                            "<option>Desarrollo Web en Entorno Cliente</option><option>Desarrollo Web en Entorno Servidor</option><option>Despliegue de Aplicaciones Web</option><option>Diseño de Interfaces Web</option><option>Proyecto de Desarrollo de Aplicaciones Web</option><option>Empresa e Iniciativa Emprendedora</option><option>Formación en Centros de Trabajo</option>";
+                    } else {
+                        modulo.innerHTML =
+                            "<option>Acceso a Datos</option><option>Programación multimedia y dispositivos móviles</option><option>Desarrollo de Interfaces</option><option>Programación de servicios y procesos</option><option>Sistemas de gestión empresarial</option><option>Proyecto de Desarrollo de Aplicaciones Multiplataforma</option><option>Empresa e Iniciativa Emprendedora</option><option>Formación en Centros de Trabajo</option>";
+                    }
+                }
+            });
+
+            reg.addEventListener("click", (e) => {
+                let ev = e || window.event;
+                if (form.checkValidity()) {
+                    ev.preventDefault();
+                    let d = document.getElementById("dni").value;
+                    if (dnis.includes(d)) {
+                        window.alert("El DNI ya existe");
+                        document.getElementById("dni").focus();
+                    } else {
+                        dnis.splice(dnis.length, 0, d);
+                        localStorage.setItem("dnis", JSON.stringify(dnis));
+                        window.alert("El usuario se ha registrado");
+                        location.reload();
+                    }
+                }
+            });
+
+            add.addEventListener("click", (e) => {
+                let ev = e || window.event;
+                ev.preventDefault();
+                if (JSON.parse(localStorage.getItem("dnis")).length > 0) {
+                    window.alert("Has añadido correctamente el módulo");
+                    location.reload();
+                } else {
+                    window.alert("No existe ningún usuario registrado");
+                }
+            });
+
+            borr.addEventListener("click", (e) => {
+                let ev = e || window.event;
+                ev.preventDefault();
+                if (JSON.parse(localStorage.getItem("dnis")).length > 0) {
+                    dnis = JSON.parse(localStorage.getItem("dnis"));
+                    dnis.splice(usuarios.selectedIndex, 1);
+                    localStorage.setItem("dnis", JSON.stringify(dnis));
+                    location.reload();
+                } else {
+                    window.alert("No existe ningún usuario al que eliminar");
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <img src="Imagenes/logotipo.png" alt="Logo">
+            <h1>C.I.F.P. Worksec</h1>
+        </a>
+    </header>
+    <main>
+        <fieldset>
+            <legend>Registrar Usuario</legend>
+            <form method="post">
+                <input id="nombre" aria-label="nombre" type="text" placeholder="Nombre" required
+                    title="Por favor, introduzca un nombre">
+
+                <input id="dni" aria-label="dni" type="text" placeholder="DNI" required pattern="[0-9]{8}[A-Za-z]{1}"
+                    title="Por favor, introduzca un DNI">
+                <input id="reg" type="submit" value="Registrar">
+                <input id="default" hidden type="reset">
+            </form>
+        </fieldset>
+        <fieldset>
+            <legend>Añadir módulo</legend>
+            <form method="post">
+                <label><span>DNI:</span>
+                    <select name="dnis">
+                        <option>No existen registros</option>
+                    </select>
+                </label>
+                <label><span>Rol:</span>
+                    <select name="rol">
+                        <option value="a">Alumno</option>
+                        <option value="p">Profesor</option>
+                    </select>
+                </label>
+                <label><span>Curso:</span>
+                    <select name="curso">
+                        <option value="1" selected>1º</option>
+                        <option value="2">2º</option>
+                    </select>
+                </label>
+                <label><span>Ciclo:</span>
+                    <select name="ciclo">
+                        <option value="w">DAW</option>
+                        <option value="m">DAM</option>
+                    </select>
+                </label>
+                <label><span>Módulos:</span>
+                    <select name="modulo">
+                        <option>Sistemas Informáticos</option>
+                        <option>Bases de Datos</option>
+                        <option>Programación</option>
+                        <option>Lenguajes de Marcas y SGI</option>
+                        <option>Entornos de Desarrollo</option>
+                        <option>Formación y orientación laboral</option>
+                    </select>
+                </label>
+                <input id="add" type="submit" value="Añadir">
+                <input id="default1" hidden type="reset">
+            </form>
+        </fieldset>
+        <fieldset>
+            <legend>Eliminar Usuario</legend>
+            <form method="post">
+                <label><span>Usuarios:</span>
+                    <select name="usuarios">
+                        <option>No existen registros</option>
+                    </select>
+                </label>
+                <input id="borr" type="submit" value="Eliminar">
+                <input id="default2" hidden type="reset">
+            </form>
+        </fieldset>
+    </main>
+</body>
+
+</html>

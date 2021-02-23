@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="icon" type="image/png" href="Imagenes/logotipo.png">
+    <link rel="stylesheet" href="inicio.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            let enviar = document.getElementById("sesion");
+
+            enviar.addEventListener("click", () => {
+                let usuario = document.getElementsByTagName("input")[0].value;
+                let pass = document.getElementsByTagName("input")[1].value;
+                if (usuario === "admin" && pass === "admin") {
+                    window.location.replace("admin.html");
+                } else {
+                    alert("El usuario o la contraseña son incorrectos");
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <aside>
+            <a href="index.html">
+                <img src="Imagenes/logotipo.png" alt="Logo">
+                <h1>C.I.F.P. Worksec</h1>
+            </a>
+            <p>Acceso al Aula Virtual</p>
+            <img src="Imagenes/inicioSesion.png" alt="inicioSesion">
+        </aside>
+        <main>
+            <input aria-label="usuario" type="text" placeholder="Usuario">
+            <input aria-label="contraseña" type="password" placeholder="Contraseña">
+            <input id="sesion" type="submit" value="Entrar">
+        </main>
+    </div>
+</body>
+
+</html>
